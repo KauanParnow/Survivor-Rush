@@ -7,6 +7,11 @@ import sys          # Pra encerrar o programa com sys.exit()
 from code.player import Player
 from code.enemy import Enemy
 from code.menu import Menu
+from code.const import (
+    SCREEN_WIDTH, SCREEN_HEIGHT, FPS, FONT_SIZE, SMALL_FONT_SIZE,
+    VICTORY_TIME, ENEMY_SPAWN_CHANCE, MUSIC_VOLUME,
+    COLOR_WHITE, COLOR_BLACK, COLOR_RED, COLOR_GREEN, COLOR_HINT
+)
 
 # Essa é a classe principal do jogo. É aqui que tudo é controlado.
 class Game:
@@ -17,9 +22,9 @@ class Game:
         # Inicio todos os módulos do pygame (vídeo, áudio, etc.)
         pygame.init()
 
-        # Defino o tamanho da janela: 800 de largura por 600 de altura.
-        self.width = 800
-        self.height = 600
+        # Defino o tamanho da janela usando as constantes do settings.
+        self.width = SCREEN_WIDTH
+        self.height = SCREEN_HEIGHT
 
         # Crio a janela do jogo com essas dimensões.
         self.screen = pygame.display.set_mode((self.width, self.height))
@@ -29,11 +34,11 @@ class Game:
 
         # O Clock eu uso pra controlar a velocidade do jogo em 60 FPS.
         self.clock = pygame.time.Clock()
-        self.fps = 60
+        self.fps = FPS
 
         # Crio duas fontes: uma principal e uma menor pra textos secundários.
-        self.font = pygame.font.SysFont(None, 40)
-        self.small_font = pygame.font.SysFont(None, 30)
+        self.font = pygame.font.SysFont(None, FONT_SIZE)
+        self.small_font = pygame.font.SysFont(None, SMALL_FONT_SIZE)
 
         # Carrego a imagem de fundo e redimensiono pro tamanho da tela.
         self.background = pygame.image.load("asset/images/background.png")
@@ -45,14 +50,14 @@ class Game:
         # Carrego a música de fundo e coloco pra tocar em loop infinito (-1).
         # O set_volume() controla o volume (0.0 a 1.0). Deixei em 0.5 pra não ficar alto demais.
         pygame.mixer.music.load("asset/sounds/background_music.mp3")
-        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.set_volume(MUSIC_VOLUME)
         pygame.mixer.music.play(-1)
 
         # O jogador precisa sobreviver 30 segundos pra vencer.
-        self.victory_time = 30
+        self.victory_time = VICTORY_TIME
 
         # A cada frame, tem 1 chance em 30 de aparecer um inimigo novo.
-        self.enemy_spawn_chance = 30
+        self.enemy_spawn_chance = ENEMY_SPAWN_CHANCE
 
         # Chamo o reset() pra inicializar as variáveis do jogo.
         self.reset()
@@ -116,7 +121,7 @@ class Game:
 
         # Mostro o cronômetro no canto superior esquerdo.
         time_now = self.get_elapsed_time()
-        timer = self.font.render(f"Tempo: {int(time_now)}s", True, (255, 255, 255))
+        timer = self.font.render(f"Tempo: {int(time_now)}s", True, COLOR_WHITE)
         self.screen.blit(timer, (10, 10))
 
         # Atualizo a tela pra exibir tudo que desenhei.
@@ -133,7 +138,7 @@ class Game:
     def final_screen(self, text, color):
 
         # Preencho a tela com preto.
-        self.screen.fill((0, 0, 0))
+        self.screen.fill(COLOR_BLACK)
 
         # Renderizo a mensagem principal (tipo "GAME OVER" ou "VOCE VENCEU!") e centralizo.
         msg = self.font.render(text, True, color)
@@ -141,7 +146,7 @@ class Game:
         self.screen.blit(msg, msg_rect)
 
         # Mostro as opções pro jogador: ENTER pra jogar de novo ou ESC pra sair.
-        hint = self.small_font.render("ENTER - Jogar novamente  |  ESC - Sair", True, (180, 180, 180))
+        hint = self.small_font.render("ENTER - Jogar novamente  |  ESC - Sair", True, COLOR_HINT)
         hint_rect = hint.get_rect(center=(self.width // 2, self.height // 2 + 30))
         self.screen.blit(hint, hint_rect)
 
@@ -204,10 +209,10 @@ class Game:
             # Se o jogador perdeu, mostro a tela de Game Over.
             # Se ele apertar ENTER, o reset() reinicia tudo.
             if self.game_over:
-                if self.final_screen("GAME OVER", (255, 0, 0)):
+                if self.final_screen("GAME OVER", COLOR_RED):
                     self.reset()
 
             # Se o jogador venceu, mostro a tela de vitória.
             if self.victory:
-                if self.final_screen("VOCE VENCEU!", (0, 255, 100)):
+                if self.final_screen("VOCE VENCEU!", COLOR_GREEN):
                     self.reset()

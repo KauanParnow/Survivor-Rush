@@ -1,5 +1,6 @@
 # Aqui eu importo o pygame, que é a biblioteca que usei para fazer o jogo.
 import pygame
+from code.const import PLAYER_SIZE, PLAYER_SPEED, PLAYER_OFFSET_Y
 
 # Essa é a classe do jogador. Eu separei em uma classe própria para ficar mais organizado.
 class Player:
@@ -11,7 +12,7 @@ class Player:
         self.image = pygame.image.load("asset/images/player.png")
 
         # Redimensiono a imagem para 60x60 pixels, que é o tamanho que achei bom pro jogo.
-        self.image = pygame.transform.scale(self.image, (60, 60))
+        self.image = pygame.transform.scale(self.image, (PLAYER_SIZE, PLAYER_SIZE))
 
         # Uso o get_rect() para criar um retângulo baseado na imagem. Esse rect eu uso pra posição e colisão.
         self.rect = self.image.get_rect()
@@ -20,10 +21,10 @@ class Player:
         self.rect.centerx = screen_width // 2
 
         # Posiciono ele perto da parte de baixo da tela, com uma margem de 100 pixels.
-        self.rect.y = screen_height - 100
+        self.rect.y = screen_height - PLAYER_OFFSET_Y
 
-        # Defino a velocidade de movimento em 7 pixels por frame.
-        self.speed = 7
+        # Defino a velocidade de movimento usando a constante do settings.
+        self.speed = PLAYER_SPEED
 
         # Guardo a largura da tela pra usar depois no limite de movimento.
         self.screen_width = screen_width

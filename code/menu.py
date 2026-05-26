@@ -1,6 +1,12 @@
 # Importo o pygame pra parte gráfica e o math pra usar a função seno no efeito pulsante.
 import pygame
 import math
+from code.const import (
+    FPS, TITLE_FONT_SIZE, SMALL_FONT_SIZE,
+    MENU_LINE_LEFT_X, MENU_LINE_RIGHT_X, MENU_LINE_TOP_Y, MENU_LINE_BOTTOM_Y,
+    MENU_TITLE_POS, MENU_SUBTITLE_POS, MENU_START_POS, MENU_CONTROLS_POS,
+    COLOR_GOLD, COLOR_MENU_BG, COLOR_MENU_SUBTITLE, COLOR_MENU_CONTROLS
+)
 
 # Essa é a classe do menu inicial. Eu criei ela separada pra deixar o código mais organizado.
 class Menu:
@@ -11,10 +17,10 @@ class Menu:
         self.font = font
 
         # Crio uma fonte maior pro título ficar destacado.
-        self.title_font = pygame.font.SysFont(None, 64)
+        self.title_font = pygame.font.SysFont(None, TITLE_FONT_SIZE)
 
         # E uma fonte menor pros textos secundários, como subtítulo e controles.
-        self.small_font = pygame.font.SysFont(None, 30)
+        self.small_font = pygame.font.SysFont(None, SMALL_FONT_SIZE)
 
         # Uso o Clock pra controlar o FPS do menu também.
         self.clock = pygame.time.Clock()
@@ -25,40 +31,40 @@ class Menu:
         while True:
 
             # Limito a 60 FPS pra não consumir processamento desnecessário.
-            self.clock.tick(60)
+            self.clock.tick(FPS)
 
             # Pego o tempo em milissegundos desde que o pygame iniciou. Uso isso pro efeito pulsante.
             ticks = pygame.time.get_ticks()
 
             # Preencho a tela com um azul bem escuro pra dar um visual mais bonito.
-            self.screen.fill((15, 15, 30))
+            self.screen.fill(COLOR_MENU_BG)
 
             # Desenho uma linha dourada decorativa acima do título.
-            pygame.draw.line(self.screen, (255, 200, 50), (150, 150), (650, 150), 2)
+            pygame.draw.line(self.screen, COLOR_GOLD, (MENU_LINE_LEFT_X, MENU_LINE_TOP_Y), (MENU_LINE_RIGHT_X, MENU_LINE_TOP_Y), 2)
 
             # Renderizo o título do jogo com cor dourada e centralizo na tela.
-            title = self.title_font.render("SURVIVOR RUSH", True, (255, 200, 50))
-            title_rect = title.get_rect(center=(400, 200))
+            title = self.title_font.render("SURVIVOR RUSH", True, COLOR_GOLD)
+            title_rect = title.get_rect(center=MENU_TITLE_POS)
             self.screen.blit(title, title_rect)
 
             # Coloco um subtítulo explicando o objetivo do jogo, com cor mais discreta.
-            subtitle = self.small_font.render("Desvie dos inimigos e sobreviva!", True, (180, 180, 200))
-            sub_rect = subtitle.get_rect(center=(400, 250))
+            subtitle = self.small_font.render("Desvie dos inimigos e sobreviva!", True, COLOR_MENU_SUBTITLE)
+            sub_rect = subtitle.get_rect(center=MENU_SUBTITLE_POS)
             self.screen.blit(subtitle, sub_rect)
 
             # Outra linha dourada embaixo do subtítulo, pra fechar o visual.
-            pygame.draw.line(self.screen, (255, 200, 50), (150, 280), (650, 280), 2)
+            pygame.draw.line(self.screen, COLOR_GOLD, (MENU_LINE_LEFT_X, MENU_LINE_BOTTOM_Y), (MENU_LINE_RIGHT_X, MENU_LINE_BOTTOM_Y), 2)
 
             # Aqui eu fiz um efeito pulsante usando math.sin(). O brilho varia entre 200 e 255,
             # então o texto do botão fica "piscando" suavemente pra chamar atenção.
             pulse = int(200 + 55 * math.sin(ticks / 300))
             start = self.font.render("[ ENTER - Jogar ]", True, (pulse, pulse, 255))
-            start_rect = start.get_rect(center=(400, 340))
+            start_rect = start.get_rect(center=MENU_START_POS)
             self.screen.blit(start, start_rect)
 
             # Mostro os controles do jogo numa cor bem discreta na parte de baixo.
-            controls = self.small_font.render("A / D  ou  SETAS  para mover", True, (120, 120, 140))
-            ctrl_rect = controls.get_rect(center=(400, 420))
+            controls = self.small_font.render("A / D  ou  SETAS  para mover", True, COLOR_MENU_CONTROLS)
+            ctrl_rect = controls.get_rect(center=MENU_CONTROLS_POS)
             self.screen.blit(controls, ctrl_rect)
 
             # Atualizo a tela pra mostrar tudo que desenhei nesse frame.

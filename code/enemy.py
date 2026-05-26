@@ -1,6 +1,7 @@
 # Importo o pygame para a parte gráfica e o random para gerar valores aleatórios.
 import pygame
 import random
+from code.const import ENEMY_SIZE, ENEMY_SPEED_MIN, ENEMY_SPEED_MAX
 
 # Essa é a classe do inimigo. Cada inimigo que aparece no jogo é um objeto dessa classe.
 class Enemy:
@@ -12,7 +13,7 @@ class Enemy:
         self.image = pygame.image.load("asset/images/enemy.png")
 
         # Redimensiono pra 60x60, mesmo tamanho do jogador.
-        self.image = pygame.transform.scale(self.image, (60, 60))
+        self.image = pygame.transform.scale(self.image, (ENEMY_SIZE, ENEMY_SIZE))
 
         # Crio o retângulo pra controlar a posição e detectar colisão.
         self.rect = self.image.get_rect()
@@ -24,7 +25,7 @@ class Enemy:
         self.rect.y = -self.rect.height
 
         # A velocidade é aleatória entre 4 e 7, então cada inimigo desce num ritmo diferente.
-        self.speed = random.randint(4, 7)
+        self.speed = random.randint(ENEMY_SPEED_MIN, ENEMY_SPEED_MAX)
 
     # Esse método move o inimigo pra baixo, somando a velocidade no eixo Y.
     def move(self):
